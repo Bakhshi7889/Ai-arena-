@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Posterly — multi-platform video poster</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📮</text></svg>" />
+  </head>
+  <body>
+    <div id="login" class="login hidden">
+      <form id="login-form" class="card">
+        <h1>Posterly</h1>
+        <p class="muted">Sign in to the publishing console.</p>
+        <label>Username<input name="username" autocomplete="username" required /></label>
+        <label>Password<input name="password" type="password" autocomplete="current-password" required /></label>
+        <button type="submit">Sign in</button>
+        <p id="login-error" class="error hidden"></p>
+      </form>
+    </div>
+
+    <div id="app" class="hidden">
+      <aside class="sidebar">
+        <div class="brand">📮 Posterly</div>
+        <nav>
+          <button data-tab="overview" class="active">Overview</button>
+          <button data-tab="upload">Post a video</button>
+          <button data-tab="jobs">Jobs</button>
+          <button data-tab="connections">Connections</button>
+          <button data-tab="keys">API keys</button>
+          <button data-tab="integrate">Integrate</button>
+        </nav>
+        <div class="sidebar-footer">
+          <div id="env" class="muted small"></div>
+          <button id="logout" class="ghost">Sign out</button>
+        </div>
+      </aside>
+
+      <main>
+        <section data-panel="overview" class="panel active">
+          <h1>Overview</h1>
+          <div id="stats" class="stat-grid"></div>
+          <h2>Networks</h2>
+          <div id="platforms" class="platform-grid"></div>
+        </section>
+
+        <section data-panel="upload" class="panel">
+          <h1>Post a video</h1>
+          <p class="muted">
+            One upload, every network. Posterly reframes and transcodes per platform when ffmpeg is available.
+          </p>
+          <form id="upload-form" class="card">
+            <label>Title<input name="title" maxlength="200" required placeholder="Behind the scenes of our launch" /></label>
+            <label>Description<textarea name="description" rows="3" placeholder="Optional caption"></textarea></label>
+            <label>Tags (comma separated)<input name="tags" placeholder="launch, product, bts" /></label>
+
+            <fieldset>
+              <legend>Send to</legend>
+              <div id="upload-targets" class="chip-row"></div>
+            </fieldset>
+
+            <fieldset>
+              <legend>Video</legend>
+              <label class="radio"><input type="radio" name="source" value="file" checked /> Upload a file</label>
+              <input type="file" name="video" accept="video/*" />
+              <label class="radio"><input type="radio" name="source" value="url" /> Pull from a URL</label>
+              <input name="videoUrl" placeholder="https://cdn.example.com/clip.mp4" />
+            </fieldset>
+
+            <label>Visibility
+              <select name="visibility">
+                <option value="private">Private</option>
+                <option value="unlisted">Unlisted</option>
+                <option value="public">Public</option>
+              </select>
+            </label>
+            <label>Callback URL (optional)<input name="callbackUrl" placeholder="https://yoursite.com/hooks/posterly" /></label>
+
+            <button type="submit">Publish everywhere</button>
+            <p id="upload-error" class="error hidden"></p>
+          </form>
+          <div id="upload-result"></div>
+        </section>
+
+        <section data-panel="jobs" class="panel">
+          <h1>Jobs</h1>
+          <div id="jobs"></div>
+        </section>
+
+        <section data-panel="connections" class="panel">
+          <h1>Connections</h1>
+          <p class="muted">Connect each network once. Tokens are encrypted at rest with <code>POSTER_SECRET</code>.</p>
+          <div id="connections"></div>
+          <h2>Add a sandbox connection</h2>
+          <p class="muted">Runs the full pipeline against simulated platform APIs — no credentials needed.</p>
+          <div id="demo-connect" class="chip-row"></div>
+          <h2>Paste an access token</h2>
+          <form id="token-form" class="card">
+            <label>Network
+              <select name="provider">
+                <option value="youtube">YouTube</option>
+                <option value="tiktok">TikTok</option>
+                <option value="facebook">Facebook Page</option>
+                <option value="instagram">Instagram</option>
+                <option value="x">X (Twitter)</option>
+                <option value="linkedin">LinkedIn</option>
+              </select>
+            </label>
+            <label>Access token<input name="accessToken" required /></label>
+            <label>Account id<input name="accountId" placeholder="page id / ig user id / person id" /></label>
+            <button type="submit">Save connection</button>
+          </form>
+        </section>
+
+        <section data-panel="keys" class="panel">
+          <h1>API keys</h1>
+          <p class="muted">Any website can publish by calling the ingest API with one of these keys.</p>
+          <form id="key-form" class="card inline">
+            <input name="name" placeholder="Key name, e.g. marketing-site" required />
+            <button type="submit">Create key</button>
+          </form>
+          <div id="keys"></div>
+          <div id="new-key" class="hidden"></div>
+        </section>
+
+        <section data-panel="integrate" class="panel">
+          <h1>Integrate</h1>
+          <p class="muted">Drop Posterly into any website — no SDK required.</p>
+          <h2>1. Embed the widget</h2>
+          <pre id="snippet-widget"></pre>
+          <h2>2. Or call the API directly</h2>
+          <pre id="snippet-curl"></pre>
+          <h2>3. Receive results</h2>
+          <pre id="snippet-callback"></pre>
+          <h2>JavaScript</h2>
+          <pre id="snippet-js"></pre>
+        </section>
+      </main>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>
